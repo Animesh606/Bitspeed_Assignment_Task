@@ -9,4 +9,4 @@ const pool =  mysql.createPool({
     port: db_port
 });
 
-module.exports = pool;
+export default pool;

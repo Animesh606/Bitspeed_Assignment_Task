@@ -4,11 +4,11 @@ import cors from "cors";
 const app: Application = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.get("/", (req, res) => {
-    res.send("welcome");
-});
+import identify from "./controllers/indentify";
 
+app.post("/identify", identify);
 
 export default app;
