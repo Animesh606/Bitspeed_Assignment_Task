@@ -84,11 +84,27 @@ const insertContact = (email: string | null, phoneNumber: string | null, linkedI
     });
 };
 
+const updateContacts = (primeId: number, secondId: number) => {
+    return new Promise((resolve, reject) => {
+        pool.query(
+            `UPDATE contact SET linkedId = ?, linkPrecedence = "secondary" WHERE linkedId = ? OR id = ?;`, [primeId, secondId, secondId],
+            (err, result) => {
+                if(err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            }
+        );
+    });
+};
+
 export {
     Contact,
     searchById,
     searchByEmail,
     searchByPhoneNumber,
     searchByLindedId,
-    insertContact
+    insertContact,
+    updateContacts
 };
