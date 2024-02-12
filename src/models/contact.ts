@@ -14,7 +14,7 @@ interface Contact {
 const searchById = (id: number) => {
     return new Promise((resolve, reject) => {
         pool.query(
-            `SELECT * FROM contact WHERE id = ? AND deleted_at IS NULL;`, [id], 
+            `SELECT * FROM contact WHERE id = ? AND deletedAt IS NULL;`, [id], 
             (err, results) => {
                 if (err) {
                     reject(err);
@@ -28,7 +28,7 @@ const searchById = (id: number) => {
 
 const searchByEmail = (email: string) => {
     return new Promise((resolve, reject) => {
-        pool.query(`SELECT * FROM contact WHERE email = ? AND deleted_at IS NULL;`, [email.toLowerCase()], 
+        pool.query(`SELECT * FROM contact WHERE email = ? AND deletedAt IS NULL;`, [email.toLowerCase()], 
         (err, results) => {
             if (err) {
                 reject(err);
@@ -42,7 +42,7 @@ const searchByEmail = (email: string) => {
 const searchByPhoneNumber = (phoneNumber: string) => {
     return new Promise((resolve, reject) => {
         pool.query(
-            `SELECT * FROM contact WHERE phoneNumber = ? AND deleted_at IS NULL;`, [phoneNumber],  
+            `SELECT * FROM contact WHERE phoneNumber = ? AND deletedAt IS NULL;`, [phoneNumber],  
             (err, results) => {
                 if (err) {
                     reject(err);
@@ -57,7 +57,7 @@ const searchByPhoneNumber = (phoneNumber: string) => {
 const searchByLindedId = (linkedId: number) => {
     return new Promise((resolve, reject) => {
         pool.query(
-            `SELECT * FROM contact WHERE linkedId = ? AND deleted_at IS NULL`, [linkedId],
+            `SELECT * FROM contact WHERE linkedId = ? AND deletedAt IS NULL`, [linkedId],
             (err, results) => {
                 if(err) {
                     reject(err);
@@ -87,7 +87,7 @@ const insertContact = (email: string | null, phoneNumber: string | null, linkedI
 const updateContacts = (primeId: number, secondId: number) => {
     return new Promise((resolve, reject) => {
         pool.query(
-            `UPDATE contact SET linkedId = ?, linkPrecedence = "secondary" WHERE linkedId = ? OR id = ?;`, [primeId, secondId, secondId],
+            `UPDATE contact SET linkedId = ?, linkPrecedence = "secondary" WHERE (linkedId = ? OR id = ?) AND id != ?;`, [primeId, secondId, secondId, primeId],
             (err, result) => {
                 if(err) {
                     reject(err);

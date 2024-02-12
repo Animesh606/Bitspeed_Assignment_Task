@@ -53,7 +53,8 @@ const indentify = async (req: Request, res: Response) => {
                 if(primeContact.phoneNumber)
                     contact.phoneNumbers.push(primeContact.phoneNumber);
                 secondaryContacts.forEach(({id, email, phoneNumber}) => {
-                    contact.secondaryContactIds.push(id);
+                    if(id !== primeContact.id)
+                        contact.secondaryContactIds.push(id);
                     if(email)
                         contact.emails.push(email);
                     if(phoneNumber)
@@ -89,7 +90,8 @@ const indentify = async (req: Request, res: Response) => {
                 if(primeContact.phoneNumber)
                     contact.phoneNumbers.push(primeContact.phoneNumber);
                 secondaryContacts.forEach(({id, email, phoneNumber}) => {
-                    contact.secondaryContactIds.push(id);
+                    if(id !== primeContact.id)
+                        contact.secondaryContactIds.push(id);
                     if(email)
                         contact.emails.push(email);
                     if(phoneNumber)
@@ -135,7 +137,8 @@ const indentify = async (req: Request, res: Response) => {
 
                 const secondaryContacts = <Contact[]> await searchByLindedId(primeContact.id);
                 secondaryContacts.forEach(({ id, email, phoneNumber }) => {
-                    contact.secondaryContactIds.push(id);
+                    if(id !== primeContact.id)
+                        contact.secondaryContactIds.push(id);
                     if(email)
                         contact.emails.push(email);
                     if(phoneNumber)
@@ -159,7 +162,8 @@ const indentify = async (req: Request, res: Response) => {
                     secondaryContactIds: []
                 }
                 secondaryContacts.forEach(({ id, email, phoneNumber }) => {
-                    contact.secondaryContactIds.push(id);
+                    if(id !== primeContact.id)
+                        contact.secondaryContactIds.push(id);
                     if(email)
                         contact.emails.push(email);
                     if(phoneNumber)
@@ -168,8 +172,12 @@ const indentify = async (req: Request, res: Response) => {
             }
         }
 
+        contact.emails = Array.from(new Set(contact.emails));
+        contact.phoneNumbers = Array.from(new Set(contact.phoneNumbers));
+
         return res.status(201).json({ contact });
     } catch (error: any) {
+        console.log(error);
         return res.status(error.statusCode).json({ message: error.message });
     }
 }
